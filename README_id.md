@@ -5,7 +5,7 @@ Ini adalah source code dari aplikasi CRUD pencatatan dengan tujuan saya mendalam
 - [English](./README.md)
 
 ## Website
-https://yusril-adr.github.io/notes-app
+https://yusril-adr.github.io/notes-app-2
 
 ## Cara Menjalankan Aplikasi
 - Pastikan node.js dan npm sudah terinstall di perangkat anda.

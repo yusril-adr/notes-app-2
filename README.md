@@ -4,7 +4,7 @@ This is the source code from my CRUD notes app. I created this app with the purp
 - [Indonesia](./README_id.md)
 
 ## Website
-https://yusril-adr.github.io/notes-app
+https://yusril-adr.github.io/notes-app-2
 
 ## How to Run App
 - Be sure your computer is already installed node.js and npm.
