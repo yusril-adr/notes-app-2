@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useColorMode, useColorModeValue, IconButton } from '@chakra-ui/react';
 import {
   MoonIcon,
   SunIcon,
 } from '@chakra-ui/icons';
 
-const ColorModeSwitcher = (props) => {
+const ColorModeSwitcher = ({ styles }) => {
   const { toggleColorMode } = useColorMode();
   const text = useColorModeValue('dark', 'light');
   const SwitchIcon = useColorModeValue(MoonIcon, SunIcon);
@@ -15,14 +16,22 @@ const ColorModeSwitcher = (props) => {
       size="md"
       fontSize="lg"
       aria-label={`Switch to ${text} mode`}
+      title={`Switch to ${text} mode`}
       variant="ghost"
       color="current"
-      marginLeft="2"
       onClick={toggleColorMode}
       icon={<SwitchIcon />}
-      {...props}
+      {...styles}
     />
   );
+};
+
+ColorModeSwitcher.defaultProps = {
+  styles: {},
+};
+
+ColorModeSwitcher.propTypes = {
+  styles: PropTypes.object,
 };
 
 export default ColorModeSwitcher;

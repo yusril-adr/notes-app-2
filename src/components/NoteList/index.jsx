@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   Heading,
@@ -12,12 +13,12 @@ import NoteItem from '../NoteItem';
 import NoteItemEmpty from '../NoteItemEmpty';
 
 const NoteList = ({
-  title, notes, onUpdate, ...props
+  title, notes, ...styles
 }) => (
   <Box
     display="flex"
     flexDir="column"
-    {...props}
+    {...styles}
   >
     <Heading as="h2">
       {title}
@@ -44,12 +45,21 @@ const NoteList = ({
         <GridItem key={note.id}>
           <NoteItem
             {...note}
-            onUpdate={onUpdate}
           />
         </GridItem>
       ))}
     </Grid>
   </Box>
 );
+
+NoteList.defaultProps = {
+  styles: {},
+};
+
+NoteList.propTypes = {
+  title: PropTypes.string.isRequired,
+  notes: PropTypes.array.isRequired,
+  styles: PropTypes.object,
+};
 
 export default NoteList;

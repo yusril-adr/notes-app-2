@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   useDisclosure,
   Box,
@@ -15,9 +20,23 @@ import {
   SearchIcon,
 } from '@chakra-ui/icons';
 
-const SearchBar = ({ onSearch }) => {
+// Services
+import {
+  NotesContext,
+} from '../../services/contexts/notes';
+
+// Utils
+import { convertSearchParams } from '../../utils/common';
+
+const SearchBar = () => {
   const [keyword, setKeyword] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { initNotes } = useContext(NotesContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    initNotes();
+  }, [searchParams]);
 
   const onInputChangeHandler = (event) => {
     setKeyword(event.target.value);
@@ -30,13 +49,20 @@ const SearchBar = ({ onSearch }) => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    onSearch(keyword);
+
+    const newSearchParams = convertSearchParams(searchParams);
+    setSearchParams({
+      ...newSearchParams,
+      search: keyword,
+    });
     onCloseHandler();
   };
 
   return (
     <Box>
       <Button
+        aria-label="Search"
+        title="Search"
         fontWeight="normal"
         w="100%"
         justifyContent="start"
@@ -50,6 +76,7 @@ const SearchBar = ({ onSearch }) => {
 
       <IconButton
         aria-label="Search"
+        title="Search"
         variant="ghost"
         display={['flex', 'none']}
         icon={<SearchIcon />}

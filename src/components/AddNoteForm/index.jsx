@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import {
   useDisclosure,
   Box,
@@ -22,7 +24,9 @@ import {
 } from '@chakra-ui/icons';
 
 // Services
-import NotesService from '../../services/localStorage/NotesService';
+import { NotesContext } from '../../services/contexts/notes';
+
+// Config
 import CONFIG from '../../global/CONFIG';
 
 const defaultInputsValue = {
@@ -30,9 +34,11 @@ const defaultInputsValue = {
   body: '',
 };
 
-const AddNoteForm = ({ onUpdate, ...props }) => {
+const AddNoteForm = ({ styles }) => {
+  const { addNote } = useContext(NotesContext);
   const [inputsValue, setInputsValue] = useState(defaultInputsValue);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
 
   const onInputChangeHandler = (event) => {
     const key = event.target.name;
@@ -45,10 +51,13 @@ const AddNoteForm = ({ onUpdate, ...props }) => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    NotesService.addNote(inputsValue);
+    const currentPath = location.pathname.split('/')[1];
+    if (currentPath === 'archives') {
+      inputsValue.archived = true;
+    }
+    addNote(inputsValue);
     onClose();
     setInputsValue(defaultInputsValue);
-    onUpdate();
   };
 
   const onCancelHandler = () => {
@@ -61,7 +70,7 @@ const AddNoteForm = ({ onUpdate, ...props }) => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      {...props}
+      {...styles}
     >
       <Button
         colorScheme="teal"
@@ -122,6 +131,14 @@ const AddNoteForm = ({ onUpdate, ...props }) => {
       </Modal>
     </Box>
   );
+};
+
+AddNoteForm.defaultProps = {
+  styles: {},
+};
+
+AddNoteForm.propTypes = {
+  styles: PropTypes.object,
 };
 
 export default AddNoteForm;

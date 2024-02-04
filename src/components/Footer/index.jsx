@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   Text,
 } from '@chakra-ui/react';
 
-const Footer = (props) => {
+const Footer = ({ styles }) => {
   const year = new Date().getFullYear();
 
   return (
     <Box
-      {...props}
+      {...styles}
       as="footer"
       textAlign="center"
     >
@@ -18,6 +19,14 @@ const Footer = (props) => {
       </Text>
     </Box>
   );
+};
+
+Footer.defaultProps = {
+  styles: {},
+};
+
+Footer.propTypes = {
+  styles: PropTypes.object,
 };
 
 export default Footer;
