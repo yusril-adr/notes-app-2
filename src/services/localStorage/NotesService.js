@@ -12,7 +12,7 @@ const NotesService = {
     notes.push({
       ...payload,
       id: nanoid(),
-      createdAt: payload.createdAt || new Date(),
+      createdAt: payload.createdAt || new Date().toISOString(),
       archived: payload.archived || false,
     });
     window.localStorage.setItem(CONFIG.NOTE_SERVICE_KEY, JSON.stringify(notes));

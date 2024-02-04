@@ -50,7 +50,7 @@ const NotesService = {
     notes = [...notes, {
       ...payload,
       id: nanoid(),
-      createdAt: payload.createdAt || new Date(),
+      createdAt: payload.createdAt || new Date().toISOString(),
       archived: payload.archived || false,
     }];
   },
