@@ -6,7 +6,8 @@ import React, {
 import PropTypes from 'prop-types';
 
 // Services
-import NotesService from '../localStorage/NotesService';
+// import NotesService from '../localStorage/NotesService';
+import NotesService from '../memoryStorage/NotesService';
 import { convertSearchParams } from '../../utils/common';
 
 const defaultValue = {
