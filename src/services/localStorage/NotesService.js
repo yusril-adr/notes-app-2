@@ -15,11 +15,14 @@ const NotesService = {
       createdAt: payload.createdAt || new Date().toISOString(),
       archived: payload.archived || false,
     });
-    window.localStorage.setItem(CONFIG.NOTE_SERVICE_KEY, JSON.stringify(notes));
+    window.localStorage.setItem(
+      CONFIG.SERVICES.LOCAL_STORAGE.NOTE_SERVICE_KEY,
+      JSON.stringify(notes),
+    );
   },
 
   getAllNotes() {
-    const notes = window.localStorage.getItem(CONFIG.NOTE_SERVICE_KEY);
+    const notes = window.localStorage.getItem(CONFIG.SERVICES.LOCAL_STORAGE.NOTE_SERVICE_KEY);
     return JSON.parse(notes) || [];
   },
 
@@ -37,14 +40,20 @@ const NotesService = {
     };
     notes[noteIdx] = updatedNote;
 
-    window.localStorage.setItem(CONFIG.NOTE_SERVICE_KEY, JSON.stringify(notes));
+    window.localStorage.setItem(
+      CONFIG.SERVICES.LOCAL_STORAGE.NOTE_SERVICE_KEY,
+      JSON.stringify(notes),
+    );
   },
 
   deleteNoteById(id) {
     const notes = this.getAllNotes();
     const updatedNotes = notes.filter((note) => (note.id !== id));
 
-    window.localStorage.setItem(CONFIG.NOTE_SERVICE_KEY, JSON.stringify(updatedNotes));
+    window.localStorage.setItem(
+      CONFIG.SERVICES.LOCAL_STORAGE.NOTE_SERVICE_KEY,
+      JSON.stringify(updatedNotes),
+    );
   },
 };
 

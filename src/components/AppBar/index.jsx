@@ -38,7 +38,7 @@ const AppBar = ({ styles }) => {
 
   const isNotesPage = useMemo(() => (
     location.pathname === '/archives'
-    || location.pathname === '/'
+    || location.pathname === '/notes'
   ), [location]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const AppBar = ({ styles }) => {
             <SearchBar />
           )}
 
-          <Link to={isArchivedPage ? '/' : '/archives'}>
+          <Link to={isArchivedPage ? '/notes' : '/archives'}>
             <IconButton
               size="md"
               fontSize="lg"

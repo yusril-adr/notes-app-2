@@ -43,7 +43,7 @@ const NoteDetail = ({
   const onDeleteHandler = () => {
     deleteNoteById(id);
     closeConfirmDelete();
-    navigate(archived ? '/archives' : '/');
+    navigate(archived ? '/archives' : '/notes');
   };
 
   return (
