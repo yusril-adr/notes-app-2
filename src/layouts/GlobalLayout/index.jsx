@@ -7,6 +7,9 @@ import {
   Outlet,
 } from 'react-router-dom';
 
+// Configs
+import CONFIG from '../../global/CONFIG';
+
 // Global Components
 import AppBar from '../../components/AppBar';
 import Footer from '../../components/Footer';
@@ -16,7 +19,7 @@ const GlobalLayout = () => (
     <SkipNavLink zIndex="9999">Skip to content</SkipNavLink>
     <AppBar styles={{ maxW: '8xl' }} />
 
-    <Container as="main" maxW="8xl" minH="calc(100vh - 283px)">
+    <Container as="main" maxW="8xl" minH={CONFIG.MAX_BODY_HEIGHT}>
       <Outlet />
     </Container>
 

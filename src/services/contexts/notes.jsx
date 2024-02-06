@@ -13,7 +13,7 @@ import { convertSearchParams } from '../../utils/common';
 const defaultValue = {
   items: [],
   searchKeyword: '',
-  state: 'loading',
+  state: 'init',
 };
 
 export const NotesContext = createContext(defaultValue);

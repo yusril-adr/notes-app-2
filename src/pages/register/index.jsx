@@ -7,11 +7,11 @@ import {
 import CONFIG from '../../global/CONFIG';
 
 // Components
-import LoginForm from '../../components/LoginForm';
+import RegisterForm from '../../components/RegisterForm';
 
 const RegisterPage = () => (
   <Box display="flex" justifyContent="center" alignItems="center" h={CONFIG.MAX_BODY_HEIGHT}>
-    <LoginForm />
+    <RegisterForm />
   </Box>
 );
 

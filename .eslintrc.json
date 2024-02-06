@@ -9,6 +9,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "consistent-return": "off",
         "import/no-extraneous-dependencies": "off",
         "linebreak-style": "off",
         "no-underscore-dangle": "off",

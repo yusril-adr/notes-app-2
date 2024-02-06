@@ -19,6 +19,9 @@ import {
   ModalFooter,
 } from '@chakra-ui/react';
 
+// Configuration
+import CONFIG from '../../global/CONFIG';
+
 // Services
 import { NotesContext } from '../../services/contexts/notes';
 
@@ -51,7 +54,7 @@ const NoteDetail = ({
       display="flex"
       justifyContent="center"
       alignItems="center"
-      minH="calc(100vh - 283px)"
+      minH={CONFIG.MAX_BODY_HEIGHT}
       px={4}
     >
       <Box

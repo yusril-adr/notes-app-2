@@ -19,17 +19,20 @@ import theme from './theme';
 import reportWebVitals from './utils/reportWebVitals';
 
 // Components
+import { AuthProvider } from './services/contexts/auth';
 import { NotesProvider } from './services/contexts/notes';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <NotesProvider>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript />
-      <App />
-    </ChakraProvider>
-  </NotesProvider>,
+  <AuthProvider>
+    <NotesProvider>
+      <ChakraProvider theme={theme}>
+        <ColorModeScript />
+        <App />
+      </ChakraProvider>
+    </NotesProvider>
+  </AuthProvider>,
 );
 
 // eslint-disable-next-line no-console

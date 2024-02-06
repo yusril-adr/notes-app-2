@@ -5,9 +5,12 @@ const CONFIG = {
       DICODING_BASE_URL: 'https://notes-api.dicoding.dev/v1',
     },
     LOCAL_STORAGE: {
+      TOKEN_KEY: 'access_token',
       NOTE_SERVICE_KEY: 'notes',
     },
   },
+  MAX_BODY_HEIGHT: 'calc(100vh - 283px)',
+  DEFAULT_ERROR_MESSAGE: 'Something went wrong with the server.',
 };
 
 export default CONFIG;

@@ -26,7 +26,7 @@ import {
 // Services
 import { NotesContext } from '../../services/contexts/notes';
 
-// Config
+// Configuration
 import CONFIG from '../../global/CONFIG';
 
 const defaultInputsValue = {
