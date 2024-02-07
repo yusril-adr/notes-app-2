@@ -1,7 +1,5 @@
 import React, {
-  useContext,
   useMemo,
-  useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -15,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import {
   LockIcon,
-  RepeatIcon,
   UnlockIcon,
 } from '@chakra-ui/icons';
 import { BsArrowRightSquareFill } from 'react-icons/bs';
@@ -27,10 +24,8 @@ import ColorModeSwitcher from '../ColorModeSwitcher';
 
 // Services
 import { useAuth } from '../../services/contexts/auth';
-import { NotesContext } from '../../services/contexts/notes';
 
 const AppBar = ({ styles }) => {
-  const { initNotes, resetNotes } = useContext(NotesContext);
   const bgColor = useColorModeValue('white', 'gray.800');
   const location = useLocation();
   // eslint-disable-next-line no-unused-vars
@@ -46,16 +41,8 @@ const AppBar = ({ styles }) => {
   const isNotesPage = useMemo(() => (
     location.pathname === '/archives'
     || location.pathname === '/notes'
+    || location.pathname.startsWith('/note/')
   ), [location]);
-
-  useEffect(() => {
-    initNotes();
-  }, []);
-
-  const onRefreshHandler = () => {
-    setSearchParams();
-    resetNotes();
-  };
 
   return (
     <Box
@@ -91,39 +78,49 @@ const AppBar = ({ styles }) => {
         <Box display="flex" alignItems="center">
           {userState === 'idle' && isNotesPage && (
             <>
-              <SearchBar />
+              {!location.pathname.startsWith('/note/') && (<SearchBar />)}
 
-              <Link to={isArchivedPage ? '/notes' : '/archives'}>
-                <IconButton
-                  size="md"
-                  fontSize="lg"
-                  aria-label={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
-                  title={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
-                  variant="ghost"
-                  color="current"
-                  ms={{
-                    base: 0,
-                    sm: 3,
-                  }}
-                  icon={isArchivedPage ? <UnlockIcon /> : <LockIcon />}
-                />
-              </Link>
+              {(isArchivedPage || location.pathname.startsWith('/note/')) && (
+                <Link to="/notes">
+                  <IconButton
+                    size="md"
+                    fontSize="lg"
+                    aria-label={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    title={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    variant="ghost"
+                    color="current"
+                    ms={{
+                      base: 0,
+                      sm: location.pathname.startsWith('/note/') ? 0 : 3,
+                    }}
+                    icon={<UnlockIcon />}
+                  />
+                </Link>
+              )}
 
-              <IconButton
-                size="md"
-                fontSize="lg"
-                aria-label="Refresh Notes"
-                title="Refresh Notes"
-                variant="ghost"
-                color="current"
-                onClick={onRefreshHandler}
-                icon={<RepeatIcon />}
-              />
+              {!isArchivedPage && !location.pathname.startsWith('/note/') && (
+                <Link to="/archives">
+                  <IconButton
+                    size="md"
+                    fontSize="lg"
+                    aria-label={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    title={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    variant="ghost"
+                    color="current"
+                    ms={{
+                      base: 0,
+                      sm: 3,
+                    }}
+                    icon={<LockIcon />}
+                  />
+                </Link>
+              )}
             </>
           )}
 
           {userState !== 'idle' && [0, 1, 2].map((idx) => (
             <Button
+              key={idx}
               colorScheme="teal"
               variant="ghost"
               ms={idx === 0 ? 0 : 3}

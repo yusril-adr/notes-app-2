@@ -27,7 +27,7 @@ const Alert = ({
     } else {
       onClose();
     }
-  }, [message]);
+  }, [message, isLoading]);
 
   return (
     <AlertDialog
@@ -36,8 +36,8 @@ const Alert = ({
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {title}
+          <AlertDialogHeader fontSize="lg" fontWeight="bold" {...isLoading && { textAlign: 'center ' }}>
+            {isLoading ? 'Loading...' : title}
           </AlertDialogHeader>
 
           <AlertDialogBody
@@ -47,11 +47,11 @@ const Alert = ({
             alignItems="center"
           >
             {isLoading && <Spinner size="xl" mb="8" />}
-            <Text>{message}</Text>
+            {!isLoading && <Text>{message}</Text>}
           </AlertDialogBody>
 
           <AlertDialogFooter>
-            {!isLoading && (
+            {!isLoading && message && (
               <Button
                 colorScheme="red"
                 ml={3}

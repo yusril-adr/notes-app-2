@@ -59,7 +59,7 @@ const App = () => {
 
           <Route element={<ProtectedRoutes redirectPath="/" />}>
             <Route path="/notes" element={<NotesPage />} />
-            <Route path="archives" element={<NotesPage isArchived />} />
+            <Route path="/archives" element={<NotesPage isArchived />} />
             <Route path="/note/:noteId" element={<NoteDetailPage />} errorElement={<NotFoundPage />} />
           </Route>
 

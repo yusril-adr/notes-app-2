@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -23,30 +23,70 @@ import {
 import CONFIG from '../../global/CONFIG';
 
 // Services
-import { NotesContext } from '../../services/contexts/notes';
+import NotesService from '../../services/api/notes';
 
 // Utils
 import DateParser from '../../utils/DateParser';
 
+// Errors
+import ClientError from '../../errors/ClientError';
+import Alert from '../Alert';
+
 const NoteDetail = ({
-  id, title, body, createdAt, archived,
+  id, title, body, createdAt, archived, onUpdate,
 }) => {
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     isOpen: isConfirmDeleteOpen,
     onOpen: openConfirmDelete,
     onClose: closeConfirmDelete,
   } = useDisclosure();
-  const { updateNoteById, deleteNoteById } = useContext(NotesContext);
   const navigate = useNavigate();
 
-  const onSwitchArchived = () => {
-    updateNoteById(id, { archived: !archived });
+  const resetAlertMessage = () => setAlertMessage(null);
+
+  const onSwitchArchived = async () => {
+    try {
+      setIsLoading(true);
+
+      if (archived) {
+        await NotesService.unarchiveNoteById(id);
+      } else {
+        await NotesService.archiveNoteById(id);
+      }
+
+      if (onUpdate) onUpdate();
+    } catch (error) {
+      if (error instanceof ClientError) {
+        setAlertMessage(error.message);
+        return;
+      }
+
+      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const onDeleteHandler = () => {
-    deleteNoteById(id);
-    closeConfirmDelete();
-    navigate(archived ? '/archives' : '/notes');
+  const onDeleteHandler = async () => {
+    try {
+      setIsLoading(true);
+
+      await NotesService.deleteNoteById(id);
+
+      closeConfirmDelete();
+      navigate(archived ? '/archives' : '/notes');
+    } catch (error) {
+      if (error instanceof ClientError) {
+        setAlertMessage(error.message);
+        return;
+      }
+
+      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -101,8 +141,14 @@ const NoteDetail = ({
           </ModalContent>
         </Modal>
       </Box>
+
+      <Alert message={alertMessage} isLoading={isLoading} onConfirm={resetAlertMessage} />
     </Box>
   );
+};
+
+NoteDetail.defaultProps = {
+  onUpdate: null,
 };
 
 NoteDetail.propTypes = {
@@ -111,6 +157,7 @@ NoteDetail.propTypes = {
   body: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   archived: PropTypes.bool.isRequired,
+  onUpdate: PropTypes.func,
 };
 
 export default NoteDetail;

@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 import {
   useDisclosure,
   Box,
@@ -14,6 +13,7 @@ import {
   ModalFooter,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   InputGroup,
   Input,
   InputRightElement,
@@ -23,46 +23,61 @@ import {
   AddIcon,
 } from '@chakra-ui/icons';
 
+import { Field, Form, Formik } from 'formik';
+import { object, string } from 'yup';
+
 // Services
-import { NotesContext } from '../../services/contexts/notes';
+import NotesService from '../../services/api/notes';
 
 // Configuration
 import CONFIG from '../../global/CONFIG';
 
-const defaultInputsValue = {
-  title: '',
-  body: '',
-};
+// Errors
+import ClientError from '../../errors/ClientError';
 
-const AddNoteForm = ({ styles }) => {
-  const { addNote } = useContext(NotesContext);
-  const [inputsValue, setInputsValue] = useState(defaultInputsValue);
+// Components
+import Alert from '../Alert';
+
+const formSchema = object({
+  title: string().max(CONFIG.NOTES_TITLE_MAX_LENGTH).required(),
+  body: string().required(),
+});
+
+const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
+  const [alertMessage, setAlertMessage] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const location = useLocation();
 
-  const onInputChangeHandler = (event) => {
-    const key = event.target.name;
-
-    const newInputsValue = { ...inputsValue };
-    newInputsValue[key] = event.target.value;
-
-    setInputsValue(newInputsValue);
+  const resetAlertMessage = () => {
+    setAlertMessage(null);
   };
 
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-    const currentPath = location.pathname.split('/')[1];
-    if (currentPath === 'archives') {
-      inputsValue.archived = true;
+  const onSubmitHandler = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const { data } = await NotesService.createNote(values);
+
+      if (isArchived) {
+        await NotesService.archiveNoteById(data.id);
+      }
+
+      setSubmitting(false);
+      resetForm();
+      onClose();
+      if (onSubmit) {
+        onSubmit();
+      }
+    } catch (error) {
+      setSubmitting(false);
+      if (error instanceof ClientError) {
+        setAlertMessage(error.message);
+        return;
+      }
+
+      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
     }
-    addNote(inputsValue);
-    onClose();
-    setInputsValue(defaultInputsValue);
   };
 
   const onCancelHandler = () => {
     onClose();
-    setInputsValue(defaultInputsValue);
   };
 
   return (
@@ -88,56 +103,89 @@ const AddNoteForm = ({ styles }) => {
         Add Note
       </Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onCancelHandler}
+      <Formik
+        initialValues={{
+          title: '',
+          body: '',
+        }}
+        validationSchema={formSchema}
+        onSubmit={onSubmitHandler}
+        onReset={onCancelHandler}
       >
-        <ModalOverlay />
-        <ModalContent as="form" onSubmit={onSubmitHandler}>
-          <ModalHeader>New Note</ModalHeader>
+        {({
+          errors, touched, values, isSubmitting,
+        }) => (
+          <Modal
+            isOpen={isOpen}
+            onClose={onCancelHandler}
+          >
+            <ModalOverlay />
 
-          <ModalCloseButton />
+            <Form>
+              <ModalContent>
+                <ModalHeader>New Note</ModalHeader>
 
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Title</FormLabel>
-              <InputGroup>
-                <Input
-                  required
-                  name="title"
-                  placeholder="Title"
-                  maxLength={CONFIG.NOTES_TITLE_MAX_LENGTH}
-                  onChange={onInputChangeHandler}
-                />
-                <InputRightElement>
-                  {CONFIG.NOTES_TITLE_MAX_LENGTH - inputsValue.title.length}
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+                <ModalCloseButton />
 
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea required name="body" placeholder="Description" onChange={onInputChangeHandler} />
-            </FormControl>
-          </ModalBody>
+                <ModalBody pb={6}>
 
-          <ModalFooter>
-            <Button type="submit" colorScheme="teal" mr={3}>
-              Save
-            </Button>
-            <Button onClick={onCancelHandler}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+                  <Field name="title">
+                    {({ field }) => (
+                      <FormControl isInvalid={errors.title && touched.title}>
+                        <FormLabel>Title</FormLabel>
+                        <InputGroup>
+                          <Input
+                            {...field}
+                            placeholder="Title"
+                            maxLength={CONFIG.NOTES_TITLE_MAX_LENGTH}
+                          />
+                          <InputRightElement>
+                            {CONFIG.NOTES_TITLE_MAX_LENGTH - values.title.length}
+                          </InputRightElement>
+                        </InputGroup>
+                        <FormErrorMessage>{errors.title}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+                  <Field name="body">
+                    {({ field }) => (
+                      <FormControl mt="4" isInvalid={errors.body && touched.body}>
+                        <FormLabel>Description</FormLabel>
+                        <Textarea {...field} name="body" placeholder="Description" />
+                        <FormErrorMessage>{errors.body}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button type="submit" colorScheme="teal" mr={3} disabled={isSubmitting}>
+                    Save
+                  </Button>
+                  <Button type="reset">Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Form>
+
+            <Alert message={alertMessage} isLoading={isSubmitting} onConfirm={resetAlertMessage} />
+          </Modal>
+        )}
+
+      </Formik>
     </Box>
   );
 };
 
 AddNoteForm.defaultProps = {
+  isArchived: false,
+  onSubmit: null,
   styles: {},
 };
 
 AddNoteForm.propTypes = {
+  isArchived: PropTypes.bool,
+  onSubmit: PropTypes.func,
   styles: PropTypes.object,
 };
 

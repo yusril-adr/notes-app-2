@@ -8,12 +8,16 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 
-// Global Components
+// Components
 import NoteItem from '../NoteItem';
 import NoteItemEmpty from '../NoteItemEmpty';
 
+// Hooks
+
 const NoteList = ({
-  title, notes, ...styles
+  isArchived,
+  notes,
+  ...styles
 }) => (
   <Box
     display="flex"
@@ -21,7 +25,7 @@ const NoteList = ({
     {...styles}
   >
     <Heading as="h2">
-      {title}
+      {isArchived ? 'Archives' : 'Notes'}
     </Heading>
 
     <Divider mt="4" mb="8" />
@@ -36,12 +40,12 @@ const NoteList = ({
       }}
     >
       {notes?.length < 1 && (
-        <GridItem colSpan={4}>
-          <NoteItemEmpty />
-        </GridItem>
+      <GridItem colSpan={4}>
+        <NoteItemEmpty />
+      </GridItem>
       )}
 
-      {notes.map((note) => (
+      {notes?.map((note) => (
         <GridItem key={note.id}>
           <NoteItem
             {...note}
@@ -49,16 +53,18 @@ const NoteList = ({
         </GridItem>
       ))}
     </Grid>
+
   </Box>
 );
 
 NoteList.defaultProps = {
+  isArchived: false,
   styles: {},
 };
 
 NoteList.propTypes = {
-  title: PropTypes.string.isRequired,
   notes: PropTypes.array.isRequired,
+  isArchived: PropTypes.bool,
   styles: PropTypes.object,
 };
 

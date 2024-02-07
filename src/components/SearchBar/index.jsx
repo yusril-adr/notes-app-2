@@ -1,7 +1,5 @@
 import React, {
   useState,
-  useContext,
-  useEffect,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -20,23 +18,13 @@ import {
   SearchIcon,
 } from '@chakra-ui/icons';
 
-// Services
-import {
-  NotesContext,
-} from '../../services/contexts/notes';
-
 // Utils
 import { convertSearchParams } from '../../utils/common';
 
 const SearchBar = () => {
   const [keyword, setKeyword] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { initNotes } = useContext(NotesContext);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    initNotes();
-  }, [searchParams]);
 
   const onInputChangeHandler = (event) => {
     setKeyword(event.target.value);

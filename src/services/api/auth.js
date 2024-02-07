@@ -6,6 +6,8 @@ import ClientError from '../../errors/ClientError';
 
 // Utils
 import { fetchWithToken } from './utils';
+
+// Services
 import TokenService from '../localStorage/TokenService';
 
 const {

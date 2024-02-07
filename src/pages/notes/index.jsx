@@ -1,31 +1,56 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { SkipNavContent } from '@chakra-ui/skip-nav';
 
-// Services
-import { NotesContext } from '../../services/contexts/notes';
+// Hooks
+import useNotes from '../../hooks/useNotes';
 
-// Global Components
+// Components
 import AddNoteForm from '../../components/AddNoteForm';
 import NoteList from '../../components/NoteList';
+import Alert from '../../components/Alert';
 
 const NotesPage = ({ isArchived }) => {
-  const { notes } = useContext(NotesContext);
+  const {
+    notes: noteData,
+    isLoading,
+    alertMessage,
+    resetAlertMessage,
+    handleInitNotes,
+  } = useNotes();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
 
-  const filteredNotes = useMemo(() => (
-    notes.items.filter((note) => (
-      note.archived === isArchived
-      && note.title.toLowerCase().includes(notes.searchKeyword.trim().toLowerCase())
-    ))
-  ), [notes, isArchived]);
+  useEffect(() => {
+    handleInitNotes(isArchived);
+  }, [searchParams, location]);
+
+  const notes = useMemo(() => {
+    const searchKeyword = searchParams.get('search');
+
+    let result = noteData;
+
+    if (searchKeyword) {
+      result = noteData.filter(({ title }) => (
+        title.toLowerCase().trim() === searchKeyword.toLowerCase().trim()
+      ));
+    }
+
+    return result;
+  }, [noteData]);
+
+  const onSubmitHandler = () => handleInitNotes(isArchived);
 
   return (
     <>
-      <AddNoteForm styles={{ mt: '16', mb: '20' }} />
+      <AddNoteForm styles={{ mt: '16', mb: '20' }} onSubmit={onSubmitHandler} />
 
       <SkipNavContent />
-      <NoteList title={isArchived ? 'Archives' : 'Notes'} notes={filteredNotes} />
+      <NoteList isArchived={isArchived} notes={notes} />
+
+      <Alert message={alertMessage} isLoading={isLoading} onConfirm={resetAlertMessage} />
     </>
   );
 };
