@@ -1,4 +1,5 @@
-/* eslint-disable import/prefer-default-export */
+import { setLocale } from 'yup';
+
 export const convertSearchParams = (params) => {
   const result = {};
 
@@ -7,4 +8,16 @@ export const convertSearchParams = (params) => {
   });
 
   return result;
+};
+
+export const initYupLocalize = (t) => {
+  setLocale({
+    mixed: {
+      required: t('This field cannot be empty.'),
+    },
+    string: {
+      min: ({ min }) => t('This field length min is {{number}}.', { number: min }),
+      max: ({ max }) => t('This field length max is {{number}}.', { number: max }),
+    },
+  });
 };

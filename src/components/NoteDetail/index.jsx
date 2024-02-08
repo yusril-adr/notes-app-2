@@ -18,6 +18,7 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 // Configuration
 import CONFIG from '../../global/CONFIG';
@@ -43,6 +44,7 @@ const NoteDetail = ({
     onClose: closeConfirmDelete,
   } = useDisclosure();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const resetAlertMessage = () => setAlertMessage(null);
 
@@ -63,7 +65,7 @@ const NoteDetail = ({
         return;
       }
 
-      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+      setAlertMessage(t(CONFIG.DEFAULT_ERROR_MESSAGE));
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +85,7 @@ const NoteDetail = ({
         return;
       }
 
-      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+      setAlertMessage(t(CONFIG.DEFAULT_ERROR_MESSAGE));
     } finally {
       setIsLoading(false);
     }
@@ -116,26 +118,26 @@ const NoteDetail = ({
 
         <ButtonGroup variant="outline" spacing="6" display="flex">
           <Button colorScheme="red" w="50%" onClick={openConfirmDelete}>
-            Delete
+            {t('Delete')}
           </Button>
           <Button colorScheme="teal" w="50%" onClick={onSwitchArchived}>
-            {archived ? 'Unarchive' : 'Archive'}
+            {archived ? t('Unarchive') : t('Archive')}
           </Button>
         </ButtonGroup>
 
         <Modal isOpen={isConfirmDeleteOpen} onClose={closeConfirmDelete}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Are you sure?</ModalHeader>
+            <ModalHeader>{t('Are you sure?')}</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>You won't be able to revert this!</ModalBody>
+            <ModalBody>{t("You won't be able to revert this!")}</ModalBody>
 
             <ModalFooter>
               <Button colorScheme="red" mr={3} onClick={onDeleteHandler}>
-                Yes, delete it!
+                {t('Yes, delete it!')}
               </Button>
               <Button variant="ghost" onClick={closeConfirmDelete}>
-                Cancel
+                {t('Cancel')}
               </Button>
             </ModalFooter>
           </ModalContent>

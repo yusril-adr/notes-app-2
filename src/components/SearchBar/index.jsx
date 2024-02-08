@@ -17,6 +17,7 @@ import {
 import {
   SearchIcon,
 } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 // Utils
 import { convertSearchParams } from '../../utils/common';
@@ -25,6 +26,7 @@ const SearchBar = () => {
   const [keyword, setKeyword] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   const onInputChangeHandler = (event) => {
     setKeyword(event.target.value);
@@ -49,8 +51,8 @@ const SearchBar = () => {
   return (
     <Box>
       <Button
-        aria-label="Search"
-        title="Search"
+        aria-label={t('Search')}
+        title={t('Search')}
         fontWeight="normal"
         w="100%"
         justifyContent="start"
@@ -59,12 +61,12 @@ const SearchBar = () => {
         leftIcon={<SearchIcon />}
         onClick={onOpen}
       >
-        Search
+        {t('Search')}
       </Button>
 
       <IconButton
-        aria-label="Search"
-        title="Search"
+        aria-label={t('Search')}
+        title={t('Search')}
         variant="ghost"
         display={['flex', 'none']}
         icon={<SearchIcon />}
@@ -84,7 +86,8 @@ const SearchBar = () => {
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="Search"
+                title={t('Search')}
+                placeholder={t('Search')}
                 value={keyword}
                 onChange={onInputChangeHandler}
               />

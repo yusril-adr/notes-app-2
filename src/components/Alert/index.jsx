@@ -12,6 +12,10 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+
+// Services
+import i18n from '../../services/localization/il18n';
 
 const Alert = ({
   title,
@@ -20,6 +24,7 @@ const Alert = ({
   onConfirm,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation;
 
   useEffect(() => {
     if (message || isLoading) {
@@ -62,7 +67,7 @@ const Alert = ({
                   }
                 }}
               >
-                Okay!
+                {t('Okay!')}
               </Button>
             )}
           </AlertDialogFooter>
@@ -73,7 +78,7 @@ const Alert = ({
 };
 
 Alert.defaultProps = {
-  title: 'Notification',
+  title: i18n.t('Notification'),
   message: '',
   isLoading: false,
   onConfirm: null,

@@ -22,6 +22,7 @@ import {
 import {
   AddIcon,
 } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 import { Field, Form, Formik } from 'formik';
 import { object, string } from 'yup';
@@ -38,14 +39,20 @@ import ClientError from '../../errors/ClientError';
 // Components
 import Alert from '../Alert';
 
-const formSchema = object({
-  title: string().max(CONFIG.NOTES_TITLE_MAX_LENGTH).required(),
-  body: string().required(),
-});
+// Utils
+import { initYupLocalize } from '../../utils/common';
 
 const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
   const [alertMessage, setAlertMessage] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation();
+
+  initYupLocalize(t);
+
+  const formSchema = object({
+    title: string().max(CONFIG.NOTES_TITLE_MAX_LENGTH).required(),
+    body: string().required(),
+  });
 
   const resetAlertMessage = () => {
     setAlertMessage(null);
@@ -72,7 +79,7 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
         return;
       }
 
-      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+      setAlertMessage(t(CONFIG.DEFAULT_ERROR_MESSAGE));
     }
   };
 
@@ -100,7 +107,7 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
         leftIcon={<AddIcon />}
         onClick={onOpen}
       >
-        Add Note
+        {t('Add Note')}
       </Button>
 
       <Formik
@@ -123,7 +130,7 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
 
             <Form>
               <ModalContent>
-                <ModalHeader>New Note</ModalHeader>
+                <ModalHeader>{t('New Note')}</ModalHeader>
 
                 <ModalCloseButton />
 
@@ -132,11 +139,11 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
                   <Field name="title">
                     {({ field }) => (
                       <FormControl isInvalid={errors.title && touched.title}>
-                        <FormLabel>Title</FormLabel>
+                        <FormLabel>{t('Title')}</FormLabel>
                         <InputGroup>
                           <Input
                             {...field}
-                            placeholder="Title"
+                            placeholder={t('Title')}
                             maxLength={CONFIG.NOTES_TITLE_MAX_LENGTH}
                           />
                           <InputRightElement>
@@ -151,8 +158,8 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
                   <Field name="body">
                     {({ field }) => (
                       <FormControl mt="4" isInvalid={errors.body && touched.body}>
-                        <FormLabel>Description</FormLabel>
-                        <Textarea {...field} name="body" placeholder="Description" />
+                        <FormLabel>{t('Description')}</FormLabel>
+                        <Textarea {...field} name="body" placeholder={t('Description')} />
                         <FormErrorMessage>{errors.body}</FormErrorMessage>
                       </FormControl>
                     )}
@@ -161,9 +168,9 @@ const AddNoteForm = ({ isArchived, onSubmit, styles }) => {
 
                 <ModalFooter>
                   <Button type="submit" colorScheme="teal" mr={3} disabled={isSubmitting}>
-                    Save
+                    {t('Save')}
                   </Button>
-                  <Button type="reset">Cancel</Button>
+                  <Button type="reset">{t('Cancel')}</Button>
                 </ModalFooter>
               </ModalContent>
             </Form>

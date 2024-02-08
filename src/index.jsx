@@ -12,6 +12,9 @@ import '@fontsource/lexend/400.css';
 import '@fontsource/lexend/500.css';
 import '@fontsource/lexend/700.css';
 
+// Localization
+import './services/localization/il18n';
+
 // Config
 import theme from './theme';
 
@@ -20,18 +23,15 @@ import reportWebVitals from './utils/reportWebVitals';
 
 // Components
 import { AuthProvider } from './services/contexts/auth';
-import { NotesProvider } from './services/contexts/notes';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-    <NotesProvider>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript />
-        <App />
-      </ChakraProvider>
-    </NotesProvider>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript />
+      <App />
+    </ChakraProvider>
   </AuthProvider>,
 );
 

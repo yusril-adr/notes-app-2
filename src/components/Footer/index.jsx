@@ -4,9 +4,11 @@ import {
   Box,
   Text,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 const Footer = ({ styles }) => {
   const year = new Date().getFullYear();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -15,7 +17,7 @@ const Footer = ({ styles }) => {
       textAlign="center"
     >
       <Text>
-        © Yusril A. P. {year} All rights reserved
+        © Yusril A. P. {year} {t('All rights reserved')}
       </Text>
     </Box>
   );

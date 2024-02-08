@@ -7,6 +7,11 @@ const CONFIG = {
     LOCAL_STORAGE: {
       TOKEN_KEY: 'access_token',
       NOTE_SERVICE_KEY: 'notes',
+      LOCALIZE_KEY: 'lang',
+    },
+    LOCALIZE: {
+      DEFAULT_LANG: 'en',
+      SECOND_LANG: 'id',
     },
   },
   MAX_BODY_HEIGHT: 'calc(100vh - 283px)',

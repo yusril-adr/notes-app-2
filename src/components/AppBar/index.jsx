@@ -16,11 +16,13 @@ import {
   UnlockIcon,
 } from '@chakra-ui/icons';
 import { BsArrowRightSquareFill } from 'react-icons/bs';
-import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 //  Components
 import SearchBar from '../SearchBar';
 import ColorModeSwitcher from '../ColorModeSwitcher';
+import LangModeSwitcher from '../LangModeSwitcher';
 
 // Services
 import { useAuth } from '../../services/contexts/auth';
@@ -28,8 +30,8 @@ import { useAuth } from '../../services/contexts/auth';
 const AppBar = ({ styles }) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const location = useLocation();
-  // eslint-disable-next-line no-unused-vars
-  const [_, setSearchParams] = useSearchParams();
+  const { t } = useTranslation();
+
   const { authData } = useAuth();
 
   const { user, state: userState } = authData;
@@ -69,9 +71,9 @@ const AppBar = ({ styles }) => {
               md: 'lg',
               lg: 'xl',
             }}
-            title="Notes App - Go to Home"
+            title={t('Notes App - Go to Home')}
           >
-            Notes App
+            {t('Notes App')}
           </Heading>
         </Link>
 
@@ -85,8 +87,8 @@ const AppBar = ({ styles }) => {
                   <IconButton
                     size="md"
                     fontSize="lg"
-                    aria-label={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
-                    title={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                    title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
                     variant="ghost"
                     color="current"
                     ms={{
@@ -103,8 +105,8 @@ const AppBar = ({ styles }) => {
                   <IconButton
                     size="md"
                     fontSize="lg"
-                    aria-label={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
-                    title={isArchivedPage ? 'Unarchived Notes' : 'Archived Notes'}
+                    aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                    title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
                     variant="ghost"
                     color="current"
                     ms={{
@@ -134,6 +136,7 @@ const AppBar = ({ styles }) => {
           ))}
 
           <ColorModeSwitcher styles={{ justifySelf: 'flex-end' }} />
+          <LangModeSwitcher styles={{ justifySelf: 'flex-end' }} />
 
           {userState !== 'idle' && (
             <Button
@@ -144,7 +147,7 @@ const AppBar = ({ styles }) => {
                 md: 'sm',
               }}
             >
-              <Skeleton>Sign In</Skeleton>
+              <Skeleton>{t('Sign In')}</Skeleton>
             </Button>
           )}
 
@@ -159,7 +162,7 @@ const AppBar = ({ styles }) => {
                     md: 'sm',
                   }}
                 >
-                  Sign In
+                  {t('Sign In')}
                 </Button>
               </Link>
               <Link to="/register">
@@ -175,7 +178,7 @@ const AppBar = ({ styles }) => {
                     md: '3',
                   }}
                 >
-                  Sign Up
+                  {t('Sign Up')}
                 </Button>
               </Link>
             </>
@@ -187,8 +190,8 @@ const AppBar = ({ styles }) => {
                 variant="ghost"
                 fontSize="lg"
                 size="md"
-                aria-label="logout"
-                title="logout"
+                aria-label={t('Logout')}
+                title={t('Logout')}
                 icon={<BsArrowRightSquareFill />}
               />
             </Link>

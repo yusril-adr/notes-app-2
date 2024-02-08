@@ -5,18 +5,20 @@ import {
   MoonIcon,
   SunIcon,
 } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 const ColorModeSwitcher = ({ styles }) => {
+  const { t } = useTranslation();
   const { toggleColorMode } = useColorMode();
-  const text = useColorModeValue('dark', 'light');
+  const text = useColorModeValue(t('dark'), t('light'));
   const SwitchIcon = useColorModeValue(MoonIcon, SunIcon);
 
   return (
     <IconButton
       size="md"
       fontSize="lg"
-      aria-label={`Switch to ${text} mode`}
-      title={`Switch to ${text} mode`}
+      aria-label={t('Switch to {{theme}} mode', { theme: text })}
+      title={t('Switch to {{theme}} mode', { theme: text })}
       variant="ghost"
       color="current"
       onClick={toggleColorMode}

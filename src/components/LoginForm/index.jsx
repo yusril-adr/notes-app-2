@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Field, Form, Formik } from 'formik';
 import { object, string } from 'yup';
+import { useTranslation } from 'react-i18next';
 
 // Configuration
 import CONFIG from '../../global/CONFIG';
@@ -35,15 +36,21 @@ import { useAuth } from '../../services/contexts/auth';
 // Components
 import Alert from '../Alert';
 
-const formSchema = object({
-  email: string().required(),
-  password: string().min(6).required(),
-});
+// Utils
+import { initYupLocalize } from '../../utils/common';
 
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  initYupLocalize(t);
+
+  const formSchema = object({
+    email: string().required(),
+    password: string().min(6).required(),
+  });
 
   const toggleShow = (val, handler) => handler(!val);
 
@@ -58,7 +65,7 @@ const LoginForm = () => {
         return setAlertMessage(error.message);
       }
 
-      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+      setAlertMessage(t(CONFIG.DEFAULT_ERROR_MESSAGE));
     } finally {
       setSubmitting(false);
     }
@@ -88,7 +95,7 @@ const LoginForm = () => {
                   <Field name="email">
                     {({ field }) => (
                       <FormControl isInvalid={errors.email && touched.email}>
-                        <FormLabel>Email Address</FormLabel>
+                        <FormLabel>{t('Email Address')}</FormLabel>
                         <Input {...field} type="email" autoComplete="off" />
                         <FormErrorMessage>{errors.email}</FormErrorMessage>
                       </FormControl>
@@ -98,17 +105,17 @@ const LoginForm = () => {
                   <Field name="password">
                     {({ field }) => (
                       <FormControl isInvalid={errors.password && touched.password}>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{t('Password')}</FormLabel>
                         <InputGroup size="md">
                           <Input
                             {...field}
                             pr="4.5rem"
                             type={showPass ? 'text' : 'password'}
-                            placeholder="Enter password"
+                            placeholder={t('Enter password')}
                           />
                           <InputRightElement>
                             <Button
-                              title={showPass ? 'Hide password' : 'Show Password'}
+                              title={showPass ? t('Hide password') : t('Show Password')}
                               onClick={() => toggleShow(showPass, setShowPass)}
                             >
                               {showPass ? <ViewOffIcon /> : <ViewIcon />}
@@ -126,7 +133,7 @@ const LoginForm = () => {
                     mt="2"
                     disabled={isSubmitting}
                   >
-                    Login
+                    {t('Login')}
                   </Button>
                 </Stack>
               </CardBody>

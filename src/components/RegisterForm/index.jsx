@@ -18,6 +18,7 @@ import {
   ViewIcon,
   ViewOffIcon,
 } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 import { Field, Form, Formik } from 'formik';
 import { object, string } from 'yup';
@@ -45,6 +46,7 @@ const RegisterForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
+  const { t } = useTranslation();
 
   const toggleShow = (val, handler) => handler(!val);
 
@@ -53,7 +55,7 @@ const RegisterForm = () => {
   const validateConfirmPassword = (password, confirmPassword) => {
     let error;
     if (password !== confirmPassword) {
-      error = 'Confirm Password failed.';
+      error = t('Confirm Password failed.');
     }
 
     return error;
@@ -62,14 +64,14 @@ const RegisterForm = () => {
   const onSubmitHandler = async (values, { setSubmitting, resetForm }) => {
     try {
       await register(values);
-      setAlertMessage('Register Success.');
+      setAlertMessage(t('Register Success.'));
       resetForm();
     } catch (error) {
       if (error instanceof ClientError) {
         return setAlertMessage(error.message);
       }
 
-      setAlertMessage(CONFIG.DEFAULT_ERROR_MESSAGE);
+      setAlertMessage(t(CONFIG.DEFAULT_ERROR_MESSAGE));
     } finally {
       setSubmitting(false);
     }
@@ -93,7 +95,7 @@ const RegisterForm = () => {
           <Form>
             <Card>
               <CardHeader pb="0">
-                <Heading size="lg" textAlign="center">Register</Heading>
+                <Heading size="lg" textAlign="center">{t('Register')}</Heading>
               </CardHeader>
 
               <CardBody>
@@ -101,7 +103,7 @@ const RegisterForm = () => {
                   <Field name="name">
                     {({ field }) => (
                       <FormControl isInvalid={errors.name && touched.name}>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>{t('Username')}</FormLabel>
                         <Input {...field} type="text" autoComplete="off" />
                         <FormErrorMessage>{errors.name}</FormErrorMessage>
                       </FormControl>
@@ -111,7 +113,7 @@ const RegisterForm = () => {
                   <Field name="email">
                     {({ field }) => (
                       <FormControl isInvalid={errors.email && touched.email}>
-                        <FormLabel>Email Address</FormLabel>
+                        <FormLabel>{t('Email Address')}</FormLabel>
                         <Input {...field} type="email" autoComplete="off" />
                         <FormErrorMessage>{errors.email}</FormErrorMessage>
                       </FormControl>
@@ -121,17 +123,17 @@ const RegisterForm = () => {
                   <Field name="password">
                     {({ field }) => (
                       <FormControl isInvalid={errors.password && touched.password}>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{t('Password')}</FormLabel>
                         <InputGroup size="md">
                           <Input
                             {...field}
                             pr="4.5rem"
                             type={showPass ? 'text' : 'password'}
-                            placeholder="Enter password"
+                            placeholder={t('Enter password')}
                           />
                           <InputRightElement>
                             <Button
-                              title={showPass ? 'Hide password' : 'Show Password'}
+                              title={showPass ? t('Hide password') : t('Show Password')}
                               onClick={() => toggleShow(showPass, setShowPass)}
                             >
                               {showPass ? <ViewOffIcon /> : <ViewIcon />}
@@ -146,17 +148,17 @@ const RegisterForm = () => {
                   <Field name="confirmPassword" validate={(value) => validateConfirmPassword(values.password, value)}>
                     {({ field }) => (
                       <FormControl isInvalid={errors.confirmPassword && touched.confirmPassword}>
-                        <FormLabel>Confirm Password</FormLabel>
+                        <FormLabel>{t('Confirm Password')}</FormLabel>
                         <InputGroup size="md">
                           <Input
                             {...field}
                             pr="4.5rem"
                             type={showConfirmPass ? 'text' : 'password'}
-                            placeholder="Confirm your password"
+                            placeholder={t('Confirm your password')}
                           />
                           <InputRightElement>
                             <Button
-                              title={showConfirmPass ? 'Hide password' : 'Show Password'}
+                              title={showConfirmPass ? t('Hide password') : t('Show Password')}
                               onClick={() => toggleShow(showConfirmPass, setShowConfirmPass)}
                             >
                               {showConfirmPass ? <ViewOffIcon /> : <ViewIcon />}
@@ -174,7 +176,7 @@ const RegisterForm = () => {
                     mt="2"
                     disabled={isSubmitting}
                   >
-                    Register
+                    {t('Register')}
                   </Button>
                 </Stack>
               </CardBody>
