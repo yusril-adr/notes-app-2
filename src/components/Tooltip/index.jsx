@@ -12,7 +12,10 @@ const ToolTipRef = forwardRef(({ children, ...rest }, ref) => (
 ));
 
 ToolTipRef.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element,
+  ]).isRequired,
 };
 
 const Tooltip = ({ children, label }) => (
@@ -24,7 +27,10 @@ const Tooltip = ({ children, label }) => (
 );
 
 Tooltip.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element,
+  ]).isRequired,
   label: PropTypes.string.isRequired,
 };
 

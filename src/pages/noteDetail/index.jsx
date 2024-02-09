@@ -48,7 +48,7 @@ const NoteDetailPage = () => {
   return (
     <>
       <SkipNavContent />
-      <NoteDetail {...note} onUpdate={initNote} />
+      {note && (<NoteDetail {...note} onUpdate={initNote} />)}
       <Alert message={alertMessage} isLoading={isLoading} onConfirm={resetAlertMessage} />
     </>
   );
