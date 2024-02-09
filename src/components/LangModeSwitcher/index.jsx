@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
 import { IoMdGlobe } from 'react-icons/io';
 
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,9 @@ import CONFIG from '../../global/CONFIG';
 
 // Services
 import LocalizeService from '../../services/localStorage/LocalizeService';
+
+// Components
+import Tooltip from '../Tooltip';
 
 const ColorModeSwitcher = ({ styles }) => {
   const { t, i18n } = useTranslation();
@@ -23,17 +26,32 @@ const ColorModeSwitcher = ({ styles }) => {
   };
 
   return (
-    <IconButton
-      size="md"
-      fontSize="lg"
-      aria-label={t('Switch to {{lang}} language', { lang: newLang })}
-      title={t('Switch to {{lang}} language', { lang: newLang })}
-      variant="ghost"
-      color="current"
-      onClick={onClickHandler}
-      icon={<IoMdGlobe />}
-      {...styles}
-    />
+    <Tooltip label={t('Switch to {{lang}} language', { lang: newLang })}>
+      <Button
+        p="0"
+        size="md"
+        fontSize="lg"
+        position="relative"
+        aria-label={t('Switch to {{lang}} language', { lang: newLang })}
+        title={t('Switch to {{lang}} language', { lang: newLang })}
+        variant="ghost"
+        color="current"
+        onClick={onClickHandler}
+        {...styles}
+      >
+        <IoMdGlobe />
+        <Text
+          position="absolute"
+          bottom="1"
+          right="1"
+          fontSize="xs"
+          textTransform="uppercase"
+          fontStyle="light"
+        >
+          {newLang}
+        </Text>
+      </Button>
+    </Tooltip>
   );
 };
 

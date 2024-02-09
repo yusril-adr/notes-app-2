@@ -7,6 +7,9 @@ import {
 } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
 
+// Components
+import Tooltip from '../Tooltip';
+
 const ColorModeSwitcher = ({ styles }) => {
   const { t } = useTranslation();
   const { toggleColorMode } = useColorMode();
@@ -14,17 +17,19 @@ const ColorModeSwitcher = ({ styles }) => {
   const SwitchIcon = useColorModeValue(MoonIcon, SunIcon);
 
   return (
-    <IconButton
-      size="md"
-      fontSize="lg"
-      aria-label={t('Switch to {{theme}} mode', { theme: text })}
-      title={t('Switch to {{theme}} mode', { theme: text })}
-      variant="ghost"
-      color="current"
-      onClick={toggleColorMode}
-      icon={<SwitchIcon />}
-      {...styles}
-    />
+    <Tooltip label={t('Switch to {{theme}} mode', { theme: text })}>
+      <IconButton
+        size="md"
+        fontSize="lg"
+        aria-label={t('Switch to {{theme}} mode', { theme: text })}
+        title={t('Switch to {{theme}} mode', { theme: text })}
+        variant="ghost"
+        color="current"
+        onClick={toggleColorMode}
+        icon={<SwitchIcon />}
+        {...styles}
+      />
+    </Tooltip>
   );
 };
 

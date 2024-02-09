@@ -19,7 +19,8 @@ import { BsArrowRightSquareFill } from 'react-icons/bs';
 import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-//  Components
+// Components
+import Tooltip from '../Tooltip';
 import SearchBar from '../SearchBar';
 import ColorModeSwitcher from '../ColorModeSwitcher';
 import LangModeSwitcher from '../LangModeSwitcher';
@@ -83,39 +84,43 @@ const AppBar = ({ styles }) => {
               {!location.pathname.startsWith('/note/') && (<SearchBar />)}
 
               {(isArchivedPage || location.pathname.startsWith('/note/')) && (
-                <Link to="/notes">
-                  <IconButton
-                    size="md"
-                    fontSize="lg"
-                    aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
-                    title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
-                    variant="ghost"
-                    color="current"
-                    ms={{
-                      base: 0,
-                      sm: location.pathname.startsWith('/note/') ? 0 : 3,
-                    }}
-                    icon={<UnlockIcon />}
-                  />
-                </Link>
+                <Tooltip label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}>
+                  <Link to="/notes">
+                    <IconButton
+                      size="md"
+                      fontSize="lg"
+                      aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                      title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                      variant="ghost"
+                      color="current"
+                      ms={{
+                        base: 0,
+                        sm: location.pathname.startsWith('/note/') ? 0 : 3,
+                      }}
+                      icon={<UnlockIcon />}
+                    />
+                  </Link>
+                </Tooltip>
               )}
 
               {!isArchivedPage && !location.pathname.startsWith('/note/') && (
-                <Link to="/archives">
-                  <IconButton
-                    size="md"
-                    fontSize="lg"
-                    aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
-                    title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
-                    variant="ghost"
-                    color="current"
-                    ms={{
-                      base: 0,
-                      sm: 3,
-                    }}
-                    icon={<LockIcon />}
-                  />
-                </Link>
+                <Tooltip label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}>
+                  <Link to="/archives">
+                    <IconButton
+                      size="md"
+                      fontSize="lg"
+                      aria-label={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                      title={isArchivedPage ? t('Unarchived Notes') : t('Archived Notes')}
+                      variant="ghost"
+                      color="current"
+                      ms={{
+                        base: 0,
+                        sm: 3,
+                      }}
+                      icon={<LockIcon />}
+                    />
+                  </Link>
+                </Tooltip>
               )}
             </>
           )}
@@ -165,6 +170,7 @@ const AppBar = ({ styles }) => {
                   {t('Sign In')}
                 </Button>
               </Link>
+
               <Link to="/register">
                 <Button
                   colorScheme="teal"
@@ -185,16 +191,18 @@ const AppBar = ({ styles }) => {
           )}
 
           {userState === 'idle' && user && (
-            <Link to="/logout">
-              <IconButton
-                variant="ghost"
-                fontSize="lg"
-                size="md"
-                aria-label={t('Logout')}
-                title={t('Logout')}
-                icon={<BsArrowRightSquareFill />}
-              />
-            </Link>
+            <Tooltip label={t('Logout')}>
+              <Link to="/logout">
+                <IconButton
+                  variant="ghost"
+                  fontSize="lg"
+                  size="md"
+                  aria-label={t('Logout')}
+                  title={t('Logout')}
+                  icon={<BsArrowRightSquareFill />}
+                />
+              </Link>
+            </Tooltip>
           )}
         </Box>
       </Container>

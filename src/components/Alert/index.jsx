@@ -24,7 +24,7 @@ const Alert = ({
   onConfirm,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (message || isLoading) {

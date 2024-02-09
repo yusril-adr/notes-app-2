@@ -19,6 +19,9 @@ import {
 } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
 
+// Components
+import Tooltip from '../Tooltip';
+
 // Utils
 import { convertSearchParams } from '../../utils/common';
 
@@ -49,30 +52,31 @@ const SearchBar = () => {
   };
 
   return (
-    <Box>
-      <Button
-        aria-label={t('Search')}
-        title={t('Search')}
-        fontWeight="normal"
-        w="100%"
-        justifyContent="start"
-        pe="32"
-        display={['none', 'flex']}
-        leftIcon={<SearchIcon />}
-        onClick={onOpen}
-      >
-        {t('Search')}
-      </Button>
+    <>
+      <Tooltip label={t('Search')}>
+        <Button
+          aria-label={t('Search')}
+          title={t('Search')}
+          fontWeight="normal"
+          w="100%"
+          justifyContent="start"
+          pe="32"
+          display={['none', 'flex']}
+          leftIcon={<SearchIcon />}
+          onClick={onOpen}
+        >
+          {t('Search')}
+        </Button>
 
-      <IconButton
-        aria-label={t('Search')}
-        title={t('Search')}
-        variant="ghost"
-        display={['flex', 'none']}
-        icon={<SearchIcon />}
-        onClick={onOpen}
-      />
-
+        <IconButton
+          aria-label={t('Search')}
+          title={t('Search')}
+          variant="ghost"
+          display={['flex', 'none']}
+          icon={<SearchIcon />}
+          onClick={onOpen}
+        />
+      </Tooltip>
       <Modal isOpen={isOpen} onClose={onCloseHandler}>
         <ModalOverlay px={[3, 0]} />
 
@@ -95,8 +99,7 @@ const SearchBar = () => {
           </Box>
         </ModalContent>
       </Modal>
-
-    </Box>
+    </>
   );
 };
 
