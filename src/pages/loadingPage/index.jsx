@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Spinner } from '@chakra-ui/react';
+import { Box, Spinner, SkipNavContent } from '@chakra-ui/react';
 
 // Configuration
 import CONFIG from '../../global/CONFIG';
 
 const LoadingPage = () => (
   <Box display="flex" justifyContent="center" alignItems="center" h={CONFIG.MAX_BODY_HEIGHT}>
+    <SkipNavContent />
     <Spinner
       thickness="4px"
       speed="0.65s"

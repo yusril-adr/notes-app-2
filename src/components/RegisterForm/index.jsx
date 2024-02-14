@@ -35,18 +35,23 @@ import { useAuth } from '../../services/contexts/auth';
 // Components
 import Alert from '../Alert';
 
-const formSchema = object({
-  name: string().required(),
-  email: string().required(),
-  password: string().min(6).required(),
-  confirmPassword: string().min(6).required(),
-});
+// Utils
+import { initYupLocalize } from '../../utils/common';
 
 const RegisterForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const { t } = useTranslation();
+
+  initYupLocalize(t);
+
+  const formSchema = object({
+    name: string().required(),
+    email: string().required(),
+    password: string().min(6).required(),
+    confirmPassword: string().min(6).required(),
+  });
 
   const toggleShow = (val, handler) => handler(!val);
 
